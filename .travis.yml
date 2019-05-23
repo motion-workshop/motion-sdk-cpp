@@ -1,0 +1,26 @@
+#
+# @file  .travis.yml
+# @brief Travis CI config file for the Motion SDK classes. Build and run unit
+#        tests on Linux and macOS.
+#
+dist: xenial
+
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+    - os: osx
+      compiler: clang
+    - os: linux
+      compiler: clang
+      env: COVERAGE=1
+      after_success:
+        - cd build
+        - make coverage
+        - bash <(curl -s https://codecov.io/bash)
+script:
+  - cd build
+  - make
+  - make test

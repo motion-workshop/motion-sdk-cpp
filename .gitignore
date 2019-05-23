@@ -1,0 +1,20 @@
+# macOS and Linux object files
+*.o
+
+# macOS and Linux build targets
+build/libMotionSDK.a
+build/test_MotionSDK
+build/example_MotionSDK
+build/example_stream_csv
+
+# Windows build and Visual Studio working files
+build/bin
+build/obj
+build/.vs
+build/*.vcxproj.user
+
+# Clang code coverage data files
+build/coverage.*
+
+# Sphinx documentation working files
+docs/build
