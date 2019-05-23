@@ -1,6 +1,7 @@
 # Motion SDK C++
 
 [![Build Status](https://travis-ci.org/motion-workshop/motion-sdk-cpp.svg?branch=master)](https://travis-ci.org/motion-workshop/motion-sdk-cpp)
+[![Build status](https://ci.appveyor.com/api/projects/status/r4pktrqe1txhl2xj?svg=true)](https://ci.appveyor.com/project/motion-workshop/motion-sdk-cpp)
 [![codecov](https://codecov.io/gh/motion-workshop/motion-sdk-cpp/branch/master/graph/badge.svg)](https://codecov.io/gh/motion-workshop/motion-sdk-cpp)
 
 ## Introduction
