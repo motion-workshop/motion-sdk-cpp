@@ -1,70 +1,22 @@
-#
-# @file  CMakeLists.txt
-# @brief Implements the MotionSDK library, unit tests, and usage example apps as
-#        a CMake project.
-#
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+# Build the MotionSDK library, unit tests, and example apps with CMake
+cmake_minimum_required(VERSION 3.5)
 
-project(
-  motion-sdk-cpp
-  VERSION 3.0
-  LANGUAGES CXX)
+project(MotionSDK LANGUAGES CXX)
 
-#
-# Global properties to enable C++11
-#
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-#
-# MotionSDK static library
-#
-add_library(
-  MotionSDK
-  src/Client.cpp
-  src/Format.cpp
-  include/Client.hpp
-  include/Format.hpp
-  include/LuaConsole.hpp)
-
-# Public include path
+# MotionSDK is a C++11 library
+add_library(MotionSDK src/Client.cpp src/Format.cpp)
+target_compile_features(MotionSDK PUBLIC cxx_std_11)
 target_include_directories(MotionSDK PUBLIC include)
-# Public library dependencies
+
 if(WIN32)
-  target_link_libraries(MotionSDK PUBLIC ws2_32)
+    target_link_libraries(MotionSDK PUBLIC ws2_32)
 endif()
 
-#
-# Unit test app
-#
-add_executable(
-  test_MotionSDK
-  test/test.cpp
-  test/test_client.cpp
-  test/test_format.cpp)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+    include(CTest)
+endif()
 
-target_link_libraries(test_MotionSDK PRIVATE MotionSDK)
-
-#
-# Example apps
-#
-# Basic example, from the project README docs
-add_executable(
-  example_MotionSDK
-  example/example.cpp)
-
-target_link_libraries(example_MotionSDK PRIVATE MotionSDK)
-
-# More in depth example, stream to CSV format
-add_executable(
-  example_stream_csv
-  example/example_stream_csv.cpp)
-
-target_link_libraries(example_stream_csv PRIVATE MotionSDK)
-
-#
-# Run unit tests
-#
-enable_testing()
-add_test(NAME test_MotionSDK COMMAND test_MotionSDK)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME AND BUILD_TESTING)
+    add_subdirectory(test)
+    add_subdirectory(example)
+endif()
