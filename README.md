@@ -1,5 +1,7 @@
 # Motion SDK C++
 
+![Build](https://github.com/motion-workshop/motion-sdk-cpp/actions/workflows/main.yml/badge.svg)
+
 ## Introduction
 
 The Motion Software Development Kit (SDK) is a collection of classes that
