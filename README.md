@@ -37,8 +37,8 @@ Measurements from the hardware:
 - `G`, raw gyroscope measurement in integer format
 - `p`, pressure sensor measurement data
 - `dt`, time step in seconds
-- `timestamp`, seconds since connection started, monotonic
-- `systemtime`, second since connection starter, system wall clock
+- `timestamp`, seconds since connection started, monotonically increasing
+- `systime`, second since connection started, system wall clock
 
 ## Quick Start
 
