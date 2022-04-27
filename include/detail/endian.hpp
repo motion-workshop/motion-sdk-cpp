@@ -23,9 +23,7 @@
  * Modified by Caleb Epstein to use <endian.h> with GNU libc and to
  * defined the BOOST_ENDIAN macro.
  */
-
-#ifndef BOOST_DETAIL_ENDIAN_HPP
-#define BOOST_DETAIL_ENDIAN_HPP
+#pragma once
 
 // GNU libc offers the helpful header <endian.h> which defines
 // __BYTE_ORDER
@@ -66,7 +64,4 @@
 # define BOOST_BYTE_ORDER 1234
 #else
 # error The file boost/detail/endian.hpp needs to be set up for your CPU type.
-#endif
-
-
 #endif

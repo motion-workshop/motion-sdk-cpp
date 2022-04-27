@@ -28,8 +28,7 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef __MOTION_SDK_DETAIL_ENDIAN_TO_NATIVE_HPP_
-#define __MOTION_SDK_DETAIL_ENDIAN_TO_NATIVE_HPP_
+#pragma once
 
 #include "endian.hpp"
 
@@ -80,4 +79,3 @@ inline T little_endian_to_native(T &value)
 
 }}} // namespace Motion::SDK::detail
 
-#endif // __MOTION_SDK_DETAIL_ENDIAN_TO_NATIVE_HPP_

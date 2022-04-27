@@ -1,9 +1,9 @@
 /*
-  @file    include/Client.hpp
+  @file    Client.hpp
   @author  Luke Tokheim, luke@motionshadow.com
-  @version 3.0
+  @version 4.0
 
-  Copyright (c) 2019, Motion Workshop
+  Copyright (c) 2022, Motion Workshop
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -28,8 +28,7 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 */
-#ifndef __MOTION_SDK_CLIENT_HPP_
-#define __MOTION_SDK_CLIENT_HPP_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -309,5 +308,3 @@ private:
 }; // class Client
 
 }} // namespace Motion::SDK
-
-#endif // __MOTION_SDK_CLIENT_HPP_

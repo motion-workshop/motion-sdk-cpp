@@ -3,9 +3,9 @@
 
   @file    src/Format.cpp
   @author  Luke Tokheim, luke@motionshadow.com
-  @version 3.0
+  @version 4.0
 
-  Copyright (c) 2019, Motion Workshop
+  Copyright (c) 2022, Motion Workshop
   All rights reserved.
 
   Redistribution and use in source and binary forms, with or without
@@ -55,7 +55,7 @@ Format::ConfigurableElement::ConfigurableElement(key_type key, data_type data)
 }
 
 const Format::ConfigurableElement::value_type &
-  Format::ConfigurableElement::operator[](size_type pos) const
+Format::ConfigurableElement::operator[](size_type pos) const
 {
   return access().at(pos);
 }
