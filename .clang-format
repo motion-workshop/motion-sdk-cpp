@@ -1,12 +1,9 @@
 #
-# @file  .clang-format
-# @brief Implements our C++ code formatting style as a clang-format
-#        configuration file.
+# C++ code formatting style as a clang-format configuration file.
 #
 BasedOnStyle: LLVM
-IndentWidth: 2
----
 Language: Cpp
+AccessModifierOffset: -2
 AlignAfterOpenBracket: AlwaysBreak
 AlignEscapedNewlines: DontAlign
 AlwaysBreakTemplateDeclarations: true
@@ -19,22 +16,20 @@ CompactNamespaces: true
 ConstructorInitializerIndentWidth: 2
 ContinuationIndentWidth: 2
 Cpp11BracedListStyle: true
+FixNamespaceComments: true
 IncludeBlocks: Preserve
 IncludeCategories:
   # Public project include files
-  - Regex:    '<[[:alpha:]]+.hpp>'
+  - Regex:    '<[[:alpha:]-]*.hpp>'
     Priority: 2
-  # Private project include files
-  - Regex:    '<detail/[[:alpha:]]+.hpp>'
-    Priority: 3
   # C++ Standard Library
   - Regex:    '<[[:alpha:]_]+>'
-    Priority: 4
+    Priority: 3
   # C Standard Library
   - Regex:    '<[[:alnum:].]+>'
-    Priority: 5
+    Priority: 4
   # Everything else, third party library headers
   - Regex:    '.*'
     Priority: 1
+IndentWidth: 2
 Standard: Cpp11
-FixNamespaceComments: true

@@ -1,9 +1,5 @@
 # Motion SDK C++
 
-[![Build Status](https://travis-ci.org/motion-workshop/motion-sdk-cpp.svg?branch=master)](https://travis-ci.org/motion-workshop/motion-sdk-cpp)
-[![Build status](https://ci.appveyor.com/api/projects/status/r4pktrqe1txhl2xj?svg=true)](https://ci.appveyor.com/project/motion-workshop/motion-sdk-cpp)
-[![codecov](https://codecov.io/gh/motion-workshop/motion-sdk-cpp/branch/master/graph/badge.svg)](https://codecov.io/gh/motion-workshop/motion-sdk-cpp)
-
 ## Introduction
 
 The Motion Software Development Kit (SDK) is a collection of classes that
@@ -22,6 +18,7 @@ Outputs from the tracking algorithms:
 
 - `Gq`, global rotation quaternion
 - `Lq`, local rotation quaternion
+- `Bq`, body space rotation quaternion
 - `r`, local rotation in Euler angles
 - `la`, global linear acceleration
 - `lv`, global linear velocity
@@ -136,29 +133,13 @@ The example above builds with the Motion SDK.
 
 ## Build
 
-To build and test the Motion SDK use the supplied Makefile or Visual Studio
-project in the `build` folder.
+Use CMake to build and test the Motion SDK.
 
 ```console
+  cmake -B build -DCMAKE_BUILD_TYPE=Release
+  cmake --build build --config Release
   cd build
-  make
-  make test
-```
-
-You may choose your favorite compiler with the CXX environment variable.
-
-```console
-  export CXX=clang++
-  cd build
-  make
-```
-
-We also supply a config file for CMake. You may use this config file to generate
-your own build files for your specific platform.
-
-```console
-  cmake .
-  make
+  ctest -C Release
 ```
 
 ## Compiler Support
