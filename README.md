@@ -146,12 +146,12 @@ Use CMake to build and test the Motion SDK.
 
 ## Compiler Support
 
-The Motion SDK requires C++11 support. We build and test the Motion SDK on:
+The Motion SDK requires C++11 support. Here are the minimum versions of the
+compilers we tested.
 
 - Microsoft Visual Studio 2017
-- Clang 3.3 and later implement all of the ISO C++ 2011 standard
-- GCC 4.8.1 was the first feature-complete implementation of the 2011 C++
-  standard
+- Clang 3.3
+- GCC 4.8.1
 
 ## License
 

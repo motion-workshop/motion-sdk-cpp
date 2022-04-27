@@ -4,7 +4,7 @@
 # - Use CMake to configure and build
 # - Use CTest to run unit tests
 #
-name: Continuous Integration
+name: Build
 
 on:
   push:
@@ -34,8 +34,7 @@ jobs:
 
     - name: Configure
       #
-      # Configure CMake in the "build" subdirectory. This will also install
-      # vcpkg dependencies from our project manifest file automagically.
+      # Configure CMake in the "build" subdirectory.
       #
       run: >
         cmake 
@@ -44,7 +43,7 @@ jobs:
 
     - name: Build
       #
-      # Build all enabled programs with the given configuration.
+      # Build all enabled programs with the current build type.
       #
       run: >
         cmake
