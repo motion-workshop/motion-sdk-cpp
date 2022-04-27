@@ -1,0 +1,64 @@
+#
+# Workflow for C++ continuous integration (CI) with CMake 
+# - Run on pull request and push to main branch
+# - Use CMake to configure and build
+# - Use CTest to run unit tests
+#
+name: Continuous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      #
+      # https://docs.github.com/en/actions/using-jobs/using-a-build-matrix-for-your-jobs
+      #
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+
+    env:
+      #
+      # Customize the CMake build type (Release, Debug, RelWithDebInfo, etc.)
+      #
+      BUILD_TYPE: Release
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure
+      #
+      # Configure CMake in the "build" subdirectory. This will also install
+      # vcpkg dependencies from our project manifest file automagically.
+      #
+      run: >
+        cmake 
+        -B ${{ github.workspace }}/build
+        -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+
+    - name: Build
+      #
+      # Build all enabled programs with the given configuration.
+      #
+      run: >
+        cmake
+        --build ${{ github.workspace }}/build
+        --config ${{ env.BUILD_TYPE }}
+
+    - name: Test
+      #
+      # Execute tests defined by the CMake configuration. In our project this
+      # is any executable target that has an associated add_test(NAME target).
+      #
+      # Example:
+      #   add_executable(unit_test unit_test.cpp)
+      #   add_test(UnitTestName unit_test)
+      #
+      working-directory: ${{ github.workspace }}/build
+      run: ctest -C ${{ env.BUILD_TYPE }}
