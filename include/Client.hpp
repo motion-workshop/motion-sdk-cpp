@@ -24,17 +24,17 @@ namespace Motion { namespace SDK {
   // This is application dependent. Use an outer loop to keep trying to read
   // data even after time outs.
   while (client.isConnected()) {
-    // Wait until there is incoming data on the open connection,
-    // timing out after 5 seconds.
-    if (client.waitForData()) {
-      // Read data samples in a loop. This will block by default for 1 second.
-      // We can simply wait on an open connection until a data sample comes in,
-      // or fall back to the outer wait loop.
-      Client::data_type data;
-      while (client.readData(data)) {
-        // Do something useful with the current real-time sample
+      // Wait until there is incoming data on the open connection, timing out
+      //after 5 seconds.
+      if (client.waitForData()) {
+          // Read data samples in a loop. This will block by default for 1
+          // second. Simply wait on an open connection until a data sample comes
+          // in, or fall back to the outer wait loop.
+          Client::data_type data;
+          while (client.readData(data)) {
+              // Do something useful with the current real-time sample
+          }
       }
-    }
   }
   @endcode
 */
