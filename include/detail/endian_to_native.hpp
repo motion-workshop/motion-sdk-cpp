@@ -31,22 +31,19 @@ namespace Motion { namespace SDK { namespace detail {
   @endcode
 */
 template <typename T>
-inline T little_endian_to_native(T &value)
+inline T little_endian_to_native(T& value)
 {
 #if MOTION_SDK_BIG_ENDIAN
-  T result = T();
+    T result = T();
 
-  const char *p = reinterpret_cast<const char *>(&value);
+    const char* p = reinterpret_cast<const char*>(&value);
 
-  std::reverse_copy(
-    p, p + sizeof(T),
-    reinterpret_cast<char *>(&result));
+    std::reverse_copy(p, p + sizeof(T), reinterpret_cast<char*>(&result));
 
-  return result;
+    return result;
 #else
-  return value;
-#endif  // MOTION_SDK_BIG_ENDIAN
+    return value;
+#endif // MOTION_SDK_BIG_ENDIAN
 }
 
 }}} // namespace Motion::SDK::detail
-

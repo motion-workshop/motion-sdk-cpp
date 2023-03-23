@@ -1,6 +1,6 @@
 # Motion SDK C++
 
-![Build](https://github.com/motion-workshop/motion-sdk-cpp/actions/workflows/main.yml/badge.svg)
+![Build](https://github.com/motion-workshop/motion-sdk-cpp/actions/workflows/test.yml/badge.svg)
 
 ## Introduction
 
@@ -52,7 +52,7 @@ data service that is running on your local computer.
 // computer. The SDK is network capable and uses TCP sockets for transport.
 Client client("", 32076);
 if (!client.isConnected()) {
-  return -1;
+    return -1;
 }
 ```
 
@@ -70,12 +70,12 @@ the data stream.
 // Lq = local quaternion rotation, 4 channels
 // c = global positional constraint, 4 channels
 const std::string xml =
-  "<?xml version=\"1.0\"?>"
-  "<configurable inactive=\"1\"><Lq/><c/></configurable>";
+    "<?xml version=\"1.0\"?>"
+    "<configurable inactive=\"1\"><Lq/><c/></configurable>";
 
 Client::data_type data(xml.begin(), xml.end());
 if (!client.writeData(data)) {
-  return -1;
+    return -1;
 }
 ```
 
@@ -91,8 +91,8 @@ devices.
 // Block for up to 5 seconds. Wait for the first sample to arrive from the
 // data service.
 if (!client.waitForData()) {
-  std::cerr << "no data available after 5 seconds, device not connected\n";
-  return -1;
+    std::cerr << "no data available after 5 seconds, device not connected\n";
+    return -1;
 }
 ```
 
@@ -105,25 +105,25 @@ container of objects.
 ```cpp
 // Enter the sample loop. For this quick start, just read 5 samples.
 for (int i=0; i<5; ++i) {
-  // Read a message. The SDK connections are stream oriented and messages
-  // arrive in sequence.
-  Client::data_type data;
-  if (!client.readData(data)) {
-    return -1;
-  }
-
-  // We have a binary sample message from the data service. Parse it with the
-  // Format class. Returns a std::map from integer key to ConfigurableElement.
-  auto map = Format::Configurable(data.begin(), data.end());
-  for (auto &kvp : map) {
-    auto &item = kvp.second;
-    // The Configurable service sends a variable number of channels. We should
-    // have 8 per device since that is what we asked for.
-    for (std::size_t j=0; j<item.size(); ++j) {
-      std::cout << item[j] << " ";
+    // Read a message. The SDK connections are stream oriented and messages
+    // arrive in sequence.
+    Client::data_type data;
+    if (!client.readData(data)) {
+        return -1;
     }
-  }
-  std::cout << "\n";
+
+    // We have a binary sample message from the data service. Parse it with the
+    // Format class. Returns a std::map from integer key to ConfigurableElement.
+    auto map = Format::Configurable(data.begin(), data.end());
+    for (auto &kvp : map) {
+        auto &item = kvp.second;
+        // The Configurable service sends a variable number of channels. We should
+        // have 8 per device since that is what we asked for.
+        for (std::size_t j=0; j<item.size(); ++j) {
+            std::cout << item[j] << " ";
+        }
+    }
+    std::cout << "\n";
 }
 ```
 
@@ -135,29 +135,23 @@ The example above builds with the Motion SDK.
 
 ## Build
 
-Use CMake to build the Motion SDK. You need to install the Catch2 library to
-enable unit tests.
+Use CMake to build and test the Motion SDK.
 
 ```console
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
-cd build
-ctest -C Release
+  cmake -B build -DCMAKE_BUILD_TYPE=Release
+  cmake --build build --config Release
+  cd build
+  ctest -C Release
 ```
 
-You may also build with Conan. This will install dependencies for you and call
-CMake.
+## Compiler Support
 
-```console
-conan install . --build=missing
-conan build .
-cd build/Release
-ctest -C Release
-```
+The Motion SDK requires C++11 support. Here are the minimum versions of the
+compilers we tested.
 
-## Compiler support
-
-The Motion SDK requires a compiler that supports C++11.
+- Microsoft Visual Studio 2017
+- Clang 3.3
+- GCC 4.8.1
 
 ## License
 

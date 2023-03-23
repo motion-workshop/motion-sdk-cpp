@@ -41,63 +41,66 @@ namespace Motion { namespace SDK {
 */
 class LuaConsole {
 public:
-  enum ResultCode {
-    // The Lua chunk was successfully parsed and executed. The printed results
-    // are in the result string.
-    Success = 0,
-    // The Lua chunk failed to run due to a compile time or execution time
-    // error. An error description is in the result string.
-    Failure = 1,
-    // The Lua chunk was incomplete. The Console service is waiting for a
-    // complete chunk before it executes. For example, "if x > 1 then" is
-    // incomplete since it requires and "end" token to close the "if" control
-    // statement.
-    Continue = 2
-  };
+    enum ResultCode {
+        // The Lua chunk was successfully parsed and executed. The printed
+        // results
+        // are in the result string.
+        Success = 0,
+        // The Lua chunk failed to run due to a compile time or execution time
+        // error. An error description is in the result string.
+        Failure = 1,
+        // The Lua chunk was incomplete. The Console service is waiting for a
+        // complete chunk before it executes. For example, "if x > 1 then" is
+        // incomplete since it requires and "end" token to close the "if"
+        // control
+        // statement.
+        Continue = 2
+    };
 
-  /**
-    Bundle together a code and printed results, basic tuple.
-  */
-  typedef std::pair<ResultCode, std::string> result_type;
+    /**
+      Bundle together a code and printed results, basic tuple.
+    */
+    typedef std::pair<ResultCode, std::string> result_type;
 
-  /**
-    Write a Lua chunk to the open Console service socket and read back the
-    printed results and a status code.
-  */
-  template <typename Client, typename String>
-  static result_type SendChunk(
-    Client &client, const String &chunk, const int &time_out_second = -1)
-  {
-    auto result = result_type{Failure, {}};
+    /**
+      Write a Lua chunk to the open Console service socket and read back the
+      printed results and a status code.
+    */
+    template <typename Client, typename String>
+    static result_type SendChunk(
+        Client& client, const String& chunk, const int& time_out_second = -1)
+    {
+        auto result = result_type{Failure, {}};
 
-    typename Client::data_type data(chunk.begin(), chunk.end());
+        typename Client::data_type data(chunk.begin(), chunk.end());
 
-    if (!client.writeData(data, time_out_second)) {
-      result.second = "failed to write Lua chunk to Console service";
-      return result;
+        if (!client.writeData(data, time_out_second)) {
+            result.second = "failed to write Lua chunk to Console service";
+            return result;
+        }
+
+        if (!client.readData(data, time_out_second) || data.empty()) {
+            result.second = "failed to read response from Console service";
+            return result;
+        }
+
+        // First character is the response code.
+        const char code = data.at(0);
+        if ((code < Success) || (code > Continue)) {
+            result.second = "unknown result code from Console service";
+            return result;
+        }
+
+        result.first = static_cast<ResultCode>(code);
+
+        // The rest of the message is any printed output from the Lua
+        // environment.
+        if (data.size() > 1) {
+            result.second.assign(data.begin() + 1, data.end());
+        }
+
+        return result;
     }
-
-    if (!client.readData(data, time_out_second) || data.empty()) {
-      result.second = "failed to read response from Console service";
-      return result;
-    }
-
-    // First character is the response code.
-    const char code = data.at(0);
-    if ((code < Success) || (code > Continue)) {
-      result.second = "unknown result code from Console service";
-      return result;
-    }
-
-    result.first = static_cast<ResultCode>(code);
-
-    // The rest of the message is any printed output from the Lua environment.
-    if (data.size() > 1) {
-      result.second.assign(data.begin() + 1, data.end());
-    }
-
-    return result;
-  }
 }; // class LuaConsole
 
 }} // namespace Motion::SDK
