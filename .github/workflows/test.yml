@@ -1,0 +1,52 @@
+#
+# Workflow for C++ continuous integration (CI) with cmake and conan
+# - Run on pull request and push to main branch
+# - Install dependencies with conan
+# - Use conan to call CMake to configure and build
+# - Use CTest to run tests
+#
+name: test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        os: [windows-2022, macos-12, ubuntu-22.04]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install package manager
+      run: >
+        pipx install conan
+        && conan profile detect
+
+    - name: Install dependencies
+      #
+      # Download packages listed in our manifest. Generate toolchain file for
+      # CMake so that we can use find_package(...) to find deps.
+      #
+      run: conan install . --build=missing
+
+    - name: Build
+      #
+      # Configure with CMake and build all enabled apps.
+      #
+      run: conan build .
+
+    - name: Test
+      #
+      # Run tests defined by CTest.
+      #
+      working-directory: build/Release
+      run: ctest --output-on-failure --config=Release
