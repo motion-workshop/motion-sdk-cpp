@@ -7,226 +7,226 @@
 #include <sstream>
 
 TEST_CASE(
-  "Client can stream from Configurable service and parse messages",
-  "[Client][Format]")
+    "Client can stream from Configurable service and parse messages",
+    "[Client][Format]")
 {
-  using namespace Motion::SDK;
+    using namespace Motion::SDK;
 
-  Client client("", 32076);
+    Client client("", 32076);
 
-  REQUIRE(client.isConnected());
+    REQUIRE(client.isConnected());
 
-  {
-    const std::string xml =
-      "<?xml version=\"1.0\"?><configurable><Lq/><c/></configurable>";
+    {
+        const std::string xml =
+            "<?xml version=\"1.0\"?><configurable><Lq/><c/></configurable>";
 
-    Client::data_type data(xml.begin(), xml.end());
-    REQUIRE(client.writeData(data));
-  }
-
-  REQUIRE(client.waitForData());
-
-  std::string xml;
-  REQUIRE(client.getXMLString(xml));
-  REQUIRE(!xml.empty());
-
-  for (int i = 0; i < 5; ++i) {
-    Client::data_type data;
-    REQUIRE(client.readData(data));
-    REQUIRE(!data.empty());
-
-    auto map = Format::Configurable(data.begin(), data.end());
-    REQUIRE(!map.empty());
-
-    for (auto &kvp : map) {
-      REQUIRE(kvp.first > 0);
-
-      auto &elem = kvp.second;
-      REQUIRE(elem.key() == kvp.first);
-
-      REQUIRE(elem.size() == 8);
-      REQUIRE(elem.getRange(0, elem.size()) == elem.access());
-
-      for (std::size_t i = 0; i < elem.size(); ++i) {
-        REQUIRE(elem[i] == elem.getRange(i, 1).front());
-        REQUIRE(elem[i] == elem.access().at(i));
-      }
+        Client::data_type data(xml.begin(), xml.end());
+        REQUIRE(client.writeData(data));
     }
-  }
+
+    REQUIRE(client.waitForData());
+
+    std::string xml;
+    REQUIRE(client.getXMLString(xml));
+    REQUIRE(!xml.empty());
+
+    for (int i = 0; i < 5; ++i) {
+        Client::data_type data;
+        REQUIRE(client.readData(data));
+        REQUIRE(!data.empty());
+
+        auto map = Format::Configurable(data.begin(), data.end());
+        REQUIRE(!map.empty());
+
+        for (auto& kvp : map) {
+            REQUIRE(kvp.first > 0);
+
+            auto& elem = kvp.second;
+            REQUIRE(elem.key() == kvp.first);
+
+            REQUIRE(elem.size() == 8);
+            REQUIRE(elem.getRange(0, elem.size()) == elem.access());
+
+            for (std::size_t i = 0; i < elem.size(); ++i) {
+                REQUIRE(elem[i] == elem.getRange(i, 1).front());
+                REQUIRE(elem[i] == elem.access().at(i));
+            }
+        }
+    }
 }
 
 TEST_CASE(
-  "Client can stream from Preview service and parse messages",
-  "[Client][Format]")
+    "Client can stream from Preview service and parse messages",
+    "[Client][Format]")
 {
-  using namespace Motion::SDK;
+    using namespace Motion::SDK;
 
-  Client client("", 32079);
+    Client client("", 32079);
 
-  REQUIRE(client.isConnected());
+    REQUIRE(client.isConnected());
 
-  REQUIRE(client.waitForData());
+    REQUIRE(client.waitForData());
 
-  std::string xml;
-  REQUIRE(client.getXMLString(xml));
-  REQUIRE(!xml.empty());
+    std::string xml;
+    REQUIRE(client.getXMLString(xml));
+    REQUIRE(!xml.empty());
 
-  for (int i = 0; i < 5; ++i) {
-    Client::data_type data;
-    REQUIRE(client.readData(data));
-    REQUIRE(!data.empty());
+    for (int i = 0; i < 5; ++i) {
+        Client::data_type data;
+        REQUIRE(client.readData(data));
+        REQUIRE(!data.empty());
 
-    auto map = Format::Preview(data.begin(), data.end());
-    REQUIRE(!map.empty());
+        auto map = Format::Preview(data.begin(), data.end());
+        REQUIRE(!map.empty());
 
-    for (auto &kvp : map) {
-      REQUIRE(kvp.first > 0);
+        for (auto& kvp : map) {
+            REQUIRE(kvp.first > 0);
 
-      auto &elem = kvp.second;
-      REQUIRE(elem.key() == kvp.first);
+            auto& elem = kvp.second;
+            REQUIRE(elem.key() == kvp.first);
 
-      auto Gq = elem.getQuaternion(false);
-      REQUIRE(Gq.size() == 4);
+            auto Gq = elem.getQuaternion(false);
+            REQUIRE(Gq.size() == 4);
 
-      auto Lq = elem.getQuaternion(true);
-      REQUIRE(Lq.size() == 4);
+            auto Lq = elem.getQuaternion(true);
+            REQUIRE(Lq.size() == 4);
 
-      auto r = elem.getEuler();
-      REQUIRE(r.size() == 3);
+            auto r = elem.getEuler();
+            REQUIRE(r.size() == 3);
 
-      auto la = elem.getAccelerate();
-      REQUIRE(la.size() == 3);
+            auto la = elem.getAccelerate();
+            REQUIRE(la.size() == 3);
 
-      auto Gm = elem.getMatrix(false);
-      REQUIRE(Gm.size() == 16);
+            auto Gm = elem.getMatrix(false);
+            REQUIRE(Gm.size() == 16);
 
-      auto A = Format::QuaternionToMatrix(Gq);
+            auto A = Format::QuaternionToMatrix(Gq);
 
-      // Bad input, 3 elements is not a quaternion. Returns identity.
-      auto B = Format::QuaternionToMatrix(r);
+            // Bad input, 3 elements is not a quaternion. Returns identity.
+            auto B = Format::QuaternionToMatrix(r);
 
-      // Bad input, zero length quaternion.
-      auto C = Format::QuaternionToMatrix({0, 0, 0, 0});
+            // Bad input, zero length quaternion.
+            auto C = Format::QuaternionToMatrix({0, 0, 0, 0});
 
-      REQUIRE(A == Gm);
-      REQUIRE(A != B);
-      REQUIRE(B == C);
+            REQUIRE(A == Gm);
+            REQUIRE(A != B);
+            REQUIRE(B == C);
+        }
     }
-  }
 }
 
 TEST_CASE(
-  "Client can stream from Sensor service and parse messages",
-  "[Client][Format]")
+    "Client can stream from Sensor service and parse messages",
+    "[Client][Format]")
 {
-  using namespace Motion::SDK;
+    using namespace Motion::SDK;
 
-  Client client("", 32078);
+    Client client("", 32078);
 
-  REQUIRE(client.isConnected());
+    REQUIRE(client.isConnected());
 
-  REQUIRE(client.waitForData());
+    REQUIRE(client.waitForData());
 
-  std::string xml;
-  REQUIRE(client.getXMLString(xml));
-  REQUIRE(!xml.empty());
+    std::string xml;
+    REQUIRE(client.getXMLString(xml));
+    REQUIRE(!xml.empty());
 
-  for (int i = 0; i < 5; ++i) {
-    Client::data_type data;
-    REQUIRE(client.readData(data));
-    REQUIRE(!data.empty());
+    for (int i = 0; i < 5; ++i) {
+        Client::data_type data;
+        REQUIRE(client.readData(data));
+        REQUIRE(!data.empty());
 
-    auto map = Format::Sensor(data.begin(), data.end());
-    REQUIRE(!map.empty());
+        auto map = Format::Sensor(data.begin(), data.end());
+        REQUIRE(!map.empty());
 
-    for (auto &kvp : map) {
-      REQUIRE(kvp.first > 0);
+        for (auto& kvp : map) {
+            REQUIRE(kvp.first > 0);
 
-      auto &elem = kvp.second;
-      REQUIRE(elem.key() == kvp.first);
+            auto& elem = kvp.second;
+            REQUIRE(elem.key() == kvp.first);
 
-      auto a = elem.getAccelerometer();
-      REQUIRE(a.size() == 3);
+            auto a = elem.getAccelerometer();
+            REQUIRE(a.size() == 3);
 
-      auto m = elem.getMagnetometer();
-      REQUIRE(m.size() == 3);
+            auto m = elem.getMagnetometer();
+            REQUIRE(m.size() == 3);
 
-      auto g = elem.getGyroscope();
-      REQUIRE(g.size() == 3);
+            auto g = elem.getGyroscope();
+            REQUIRE(g.size() == 3);
+        }
     }
-  }
 }
 
 TEST_CASE(
-  "Client can stream from Raw service and parse messages", "[Client][Format]")
+    "Client can stream from Raw service and parse messages", "[Client][Format]")
 {
-  using namespace Motion::SDK;
+    using namespace Motion::SDK;
 
-  Client client("", 32077);
+    Client client("", 32077);
 
-  REQUIRE(client.isConnected());
+    REQUIRE(client.isConnected());
 
-  REQUIRE(client.waitForData());
+    REQUIRE(client.waitForData());
 
-  std::string xml;
-  REQUIRE(client.getXMLString(xml));
-  REQUIRE(!xml.empty());
+    std::string xml;
+    REQUIRE(client.getXMLString(xml));
+    REQUIRE(!xml.empty());
 
-  for (int i = 0; i < 5; ++i) {
-    Client::data_type data;
-    REQUIRE(client.readData(data));
-    REQUIRE(!data.empty());
+    for (int i = 0; i < 5; ++i) {
+        Client::data_type data;
+        REQUIRE(client.readData(data));
+        REQUIRE(!data.empty());
 
-    auto map = Format::Raw(data.begin(), data.end());
-    REQUIRE(!map.empty());
+        auto map = Format::Raw(data.begin(), data.end());
+        REQUIRE(!map.empty());
 
-    for (auto &kvp : map) {
-      REQUIRE(kvp.first > 0);
+        for (auto& kvp : map) {
+            REQUIRE(kvp.first > 0);
 
-      auto &elem = kvp.second;
-      REQUIRE(elem.key() == kvp.first);
+            auto& elem = kvp.second;
+            REQUIRE(elem.key() == kvp.first);
 
-      auto A = elem.getAccelerometer();
-      REQUIRE(A.size() == 3);
+            auto A = elem.getAccelerometer();
+            REQUIRE(A.size() == 3);
 
-      auto M = elem.getMagnetometer();
-      REQUIRE(M.size() == 3);
+            auto M = elem.getMagnetometer();
+            REQUIRE(M.size() == 3);
 
-      auto G = elem.getGyroscope();
-      REQUIRE(G.size() == 3);
+            auto G = elem.getGyroscope();
+            REQUIRE(G.size() == 3);
+        }
     }
-  }
 }
 
 TEST_CASE(
-  "Client can connect to the Console service and send commands",
-  "[Client][LuaConsole]")
+    "Client can connect to the Console service and send commands",
+    "[Client][LuaConsole]")
 {
-  using namespace Motion::SDK;
+    using namespace Motion::SDK;
 
-  Client client("", 32075);
+    Client client("", 32075);
 
-  REQUIRE(client.isConnected());
+    REQUIRE(client.isConnected());
 
-  SECTION("send a Lua command a print the results")
-  {
-    const std::string lua = "return true";
-    auto result = LuaConsole::SendChunk(client, lua);
+    SECTION("send a Lua command a print the results")
+    {
+        const std::string lua = "return true";
+        auto result = LuaConsole::SendChunk(client, lua);
 
-    REQUIRE(result.first == LuaConsole::ResultCode::Success);
-    REQUIRE(result.second == "true\n");
-  }
+        REQUIRE(result.first == LuaConsole::ResultCode::Success);
+        REQUIRE(result.second == "true\n");
+    }
 
-  SECTION("can not send a Lua command to a closed client")
-  {
-    client.close();
+    SECTION("can not send a Lua command to a closed client")
+    {
+        client.close();
 
-    const std::string lua = "return true";
-    auto result = LuaConsole::SendChunk(client, lua);
+        const std::string lua = "return true";
+        auto result = LuaConsole::SendChunk(client, lua);
 
-    REQUIRE(result.first == LuaConsole::ResultCode::Failure);
-    REQUIRE(!result.second.empty());
-  }
+        REQUIRE(result.first == LuaConsole::ResultCode::Failure);
+        REQUIRE(!result.second.empty());
+    }
 
 #if 0
   SECTION("send an incomplete Lua command")
@@ -262,18 +262,18 @@ TEST_CASE(
 }
 
 TEST_CASE(
-  "LuaConsole fails when connected to Configurable service",
-  "[Client][LuaConsole]")
+    "LuaConsole fails when connected to Configurable service",
+    "[Client][LuaConsole]")
 {
-  using namespace Motion::SDK;
+    using namespace Motion::SDK;
 
-  Client client("", 32076);
+    Client client("", 32076);
 
-  REQUIRE(client.isConnected());
+    REQUIRE(client.isConnected());
 
-  const std::string lua = "return true";
-  auto result = LuaConsole::SendChunk(client, lua);
-  REQUIRE(result.first == LuaConsole::ResultCode::Failure);
+    const std::string lua = "return true";
+    auto result = LuaConsole::SendChunk(client, lua);
+    REQUIRE(result.first == LuaConsole::ResultCode::Failure);
 }
 
 #if 0

@@ -101,6 +101,6 @@ public:
 
         return result;
     }
-}; // class LuaConsole
+};
 
 }} // namespace Motion::SDK

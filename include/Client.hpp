@@ -64,6 +64,22 @@ public:
     virtual ~Client();
 
     /**
+      Disable the copy and move constructors.
+
+      This is a resource object. Copy constructor semantics are unclear.
+    */
+    Client(const Client& rhs) = delete;
+    Client(Client&& rhs) = delete;
+
+    /**
+      Disable the assignment operator.
+
+      @see Client#Client(const Client &)
+    */
+    Client& operator=(const Client& lhs) = delete;
+    Client& operator=(Client&& lhs) = delete;
+
+    /**
       Close the current client connection.
     */
     virtual void close();
@@ -263,20 +279,6 @@ private:
       @post    N bytes of data was written to the socket
     */
     int socketSend(const char* buf, std::size_t len, bool& timed_out);
-
-    /**
-      Disable the copy constructor.
-
-      This is a resource object. Copy constructor semantics are unclear.
-    */
-    Client(const Client& rhs) = delete;
-
-    /**
-      Disable the assignment operator.
-
-      @see Client#Client(const Client &)
-    */
-    const Client& operator=(const Client& lhs) = delete;
-}; // class Client
+};
 
 }} // namespace Motion::SDK

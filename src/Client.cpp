@@ -169,7 +169,7 @@ Client::Client(const std::string& host, unsigned port) : Client{}
     {
         // Create the address structure to describe the remote host and
         // port we would like to connect to.
-        sockaddr_in address;
+        sockaddr_in address{};
         {
             address.sin_family = AF_INET;
             address.sin_port = htons(static_cast<unsigned short>(port));

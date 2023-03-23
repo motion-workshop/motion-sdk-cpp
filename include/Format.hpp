@@ -314,13 +314,13 @@ public:
 
         /**
           Get a set of x, y, and z values of the current un-filtered
-          magnetometer signal. Specified in <tt>µT</tt> (microtesla).
+          magnetometer signal. Specified in <tt>uT</tt> (microtesla).
 
           Domain varies with local magnetic field strength. Expect values
-          on domain <tt>[-60, 60]</tt> <tt>µT</tt> (microtesla).
+          on domain <tt>[-60, 60]</tt> <tt>uT</tt> (microtesla).
 
           @return a three element array <tt>{x, y, z}</tt> of magnetic field
-          strength in <tt>µT</tt> (microtesla) or zeros if there is no
+          strength in <tt>uT</tt> (microtesla) or zeros if there is no
           available data
         */
         data_type getMagnetometer() const;
@@ -597,11 +597,6 @@ private:
 
         return list;
     }
-
-    /**
-      Hide the constructor. There is no need to instantiate the Format class.
-    */
-    Format();
-}; // class Format
+};
 
 }} // namespace Motion::SDK

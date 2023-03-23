@@ -9,10 +9,8 @@ class MotionSdkRecipe(ConanFile):
     homepage = "https://github.com/motion-workshop/motion-sdk-cpp"
     license = "BSD"
 
-    # Binary configuration
+    build_policy = "missing"
     settings = "os", "arch", "compiler", "build_type"
-
-    # Copy sources to when building this recipe for the local cache
     exports_sources = "CMakeLists.txt", "include/*", "src/*", "example/*", "test/*"
 
     def layout(self):
