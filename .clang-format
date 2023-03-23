@@ -3,24 +3,24 @@
 #
 BasedOnStyle: LLVM
 Language: Cpp
-AccessModifierOffset: -2
+AccessModifierOffset: -4
 AlignAfterOpenBracket: AlwaysBreak
 AlignEscapedNewlines: DontAlign
-AlwaysBreakTemplateDeclarations: true
+AlwaysBreakTemplateDeclarations: Yes
 AllowShortFunctionsOnASingleLine: None
 BreakBeforeBraces: Custom
 BraceWrapping:
   AfterFunction: true
   SplitEmptyFunction: true
 CompactNamespaces: true
-ConstructorInitializerIndentWidth: 2
-ContinuationIndentWidth: 2
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
 Cpp11BracedListStyle: true
 FixNamespaceComments: true
 IncludeBlocks: Preserve
 IncludeCategories:
   # Public project include files
-  - Regex:    '<[[:alpha:]-]*.hpp>'
+  - Regex:    '<?[[:alpha:]_]*.hpp>'
     Priority: 2
   # C++ Standard Library
   - Regex:    '<[[:alpha:]_]+>'
@@ -31,5 +31,6 @@ IncludeCategories:
   # Everything else, third party library headers
   - Regex:    '.*'
     Priority: 1
-IndentWidth: 2
-Standard: Cpp11
+IndentWidth: 4
+PointerAlignment: Left
+Standard: c++11

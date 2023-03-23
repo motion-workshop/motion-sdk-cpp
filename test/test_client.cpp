@@ -1,6 +1,6 @@
-#include "catch.hpp"
-
 #include <Client.hpp>
+
+#include <catch2/catch_test_macros.hpp>
 
 TEST_CASE("Client can connect to local server", "[Client]")
 {
@@ -261,7 +261,7 @@ TEST_CASE("Client error checking works", "[Client]")
     int failed_i = -1;
 
     Client::data_type data(65535, 0);
-    for (int i=0; i<100; ++i) {
+    for (int i = 0; i < 100; ++i) {
       if (!client.writeData(data)) {
         failed_i = i;
         break;

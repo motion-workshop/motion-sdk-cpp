@@ -1,9 +1,8 @@
-#define CATCH_CONFIG_MAIN
-#include "catch.hpp"
-
 #include <Client.hpp>
 #include <Format.hpp>
 #include <LuaConsole.hpp>
+
+#include <catch2/catch_test_macros.hpp>
 
 #include <sstream>
 
