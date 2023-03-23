@@ -25,17 +25,17 @@ namespace Motion { namespace SDK {
 
      auto result = LuaConsole::SendChunk(client, chunk);
      if (result.first == LuaConsole::Success) {
-       // This should be "Hello World\n"
-       std::cout << result.second;
+           // This should be "Hello World\n"
+           std::cout << result.second;
      } else if (result.first == LuaConsole::Continue) {
-       std::cerr << "incomplete Lua chunk: " << result.second;
+        std::cerr << "incomplete Lua chunk: " << result.second;
      } else {
-       std::cerr << "command failed: " << result.second;
+        std::cerr << "command failed: " << result.second;
      }
 
-   } catch (std::runtime_error &e) {
-     // The Client class may throw std::runtime_error for any unrecoverable
-     // conditions.
+   } catch (std::exception &e) {
+        // The Client class may throw std::exception for any unrecoverable
+        // conditions.
    }
    @endcode
 */

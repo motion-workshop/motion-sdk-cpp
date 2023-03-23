@@ -27,15 +27,15 @@ namespace Motion { namespace SDK {
 
   Client::data_type data;
   while (client.readData(data)) {
-    // Create an object representation of the current binary message.
-    auto map = Format::Preview(data.begin(), data.end());
+      // Create an object representation of the current binary message.
+      auto map = Format::Preview(data.begin(), data.end());
 
-    // Iterate through the list of [id] => PreviewElement objects. This is an
-    // STL map and stored as a key-value pair.
-    for (auto &kvp : map) {
-      // Use the PreviewElement interface to access format specific data.
-      auto &element = kvp.second;
-    }
+      // Iterate through the list of [id] => PreviewElement objects. This is an
+      // STL map and stored as a key-value pair.
+      for (auto &kvp : map) {
+          // Use the PreviewElement interface to access format specific data.
+          auto &element = kvp.second;
+      }
   }
   @endcode
 */

@@ -2,6 +2,7 @@
 #include <Client.hpp>
 
 #include <algorithm>
+#include <cstring>
 
 #if defined(_WIN32)
 #if !defined(WIN32_LEAN_AND_MEAN)
@@ -426,8 +427,10 @@ bool Client::readMessage(data_type& data)
     {
         // Copy the network ordered message length header. Make sure it is a
         // "reasonable" value.
-        const unsigned length =
-            ntohl(*reinterpret_cast<const unsigned*>(&buffer[0]));
+        unsigned length = 0;
+        std::memcpy(&length, buffer.data(), sizeof(unsigned));
+        length = ntohl(length);
+
         if ((length == 0) || (length > MaximumMessageLength)) {
             CLIENT_ERROR(
                 "communication protocol error, message header specifies "
@@ -503,12 +506,11 @@ bool Client::writeMessage(const data_type& data)
         const unsigned length = htonl(static_cast<unsigned>(data.size()));
 
         // Copy the length header into the send buffer.
-        auto itr = std::copy_n(
-            reinterpret_cast<const char*>(&length), sizeof(unsigned),
-            m_buffer.begin());
+        std::memcpy(m_buffer.data(), &length, sizeof(length));
 
         // Copy byte payload into the send buffer.
-        std::copy(data.begin(), data.end(), itr);
+        std::copy(
+            data.begin(), data.end(), m_buffer.begin() + sizeof(unsigned));
     }
 
     bool timed_out = false;
