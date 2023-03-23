@@ -135,23 +135,29 @@ The example above builds with the Motion SDK.
 
 ## Build
 
-Use CMake to build and test the Motion SDK.
+Use CMake to build the Motion SDK. You need to install the Catch2 library to
+enable unit tests.
 
 ```console
-  cmake -B build -DCMAKE_BUILD_TYPE=Release
-  cmake --build build --config Release
-  cd build
-  ctest -C Release
+cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --config Release
+cd build
+ctest -C Release
 ```
 
-## Compiler Support
+You may also build with Conan. This will install dependencies for you and call
+CMake.
 
-The Motion SDK requires C++11 support. Here are the minimum versions of the
-compilers we tested.
+```console
+conan install . --build=missing
+conan build .
+cd build/Release
+ctest -C Release
+```
 
-- Microsoft Visual Studio 2017
-- Clang 3.3
-- GCC 4.8.1
+## Compiler support
+
+The Motion SDK requires a compiler that supports C++11.
 
 ## License
 
