@@ -1,2 +1,9 @@
-# Our default staging folder for CMake
+# Visual Studio
+.vs/
+out/
+
+# We use this path for CI and command line cmake
 build/
+
+# Conan generated file
+CMakeUserPresets.json
